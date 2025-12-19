@@ -10,6 +10,7 @@ import com.luohuo.flex.ai.controller.model.vo.model.AiModelSimpleRespVO;
 import com.luohuo.flex.ai.dal.model.AiModelDO;
 import com.luohuo.flex.ai.enums.CommonStatusEnum;
 import com.luohuo.flex.ai.service.model.AiModelService;
+import com.luohuo.flex.ai.service.model.AiModelUsageService;
 import com.luohuo.flex.ai.utils.BeanUtils;
 import com.luohuo.basic.base.R;
 import com.luohuo.basic.context.ContextUtil;
@@ -34,6 +35,9 @@ public class AiModelController {
 
 	@Resource
 	private AiModelService modelService;
+
+	@Resource
+	private AiModelUsageService modelUsageService;
 
 	@PostMapping("/create")
 	@Operation(summary = "创建模型")
@@ -88,6 +92,13 @@ public class AiModelController {
 	public R<AiModelRespVO> getModel(@RequestParam("id") Long id) {
 		AiModelDO model = modelService.getModel(id);
 		return success(BeanUtils.toBean(model, AiModelRespVO.class));
+	}
+
+	@GetMapping("/get-remaining-usage")
+	@Operation(summary = "获得模型剩余使用次数")
+	@Parameter(name = "id", description = "模型编号", required = true, example = "1024")
+	public R<Integer> getModelRemainingUsage(@RequestParam("id") Long id) {
+		return success(modelUsageService.getRemainingUsageCount(ContextUtil.getUid(), id));
 	}
 
 	@GetMapping("/page")

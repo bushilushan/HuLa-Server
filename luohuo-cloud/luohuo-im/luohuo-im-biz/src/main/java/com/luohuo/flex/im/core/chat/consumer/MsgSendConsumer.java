@@ -1,7 +1,6 @@
 package com.luohuo.flex.im.core.chat.consumer;
 
 import com.luohuo.basic.cache.repository.CachePlusOps;
-import com.luohuo.basic.context.ContextUtil;
 import com.luohuo.flex.common.OnlineService;
 import com.luohuo.flex.common.cache.PassageMsgCacheKeyBuilder;
 import com.luohuo.flex.common.constant.MqConstant;
@@ -86,7 +85,7 @@ public class MsgSendConsumer implements RocketMQListener<MsgSendMessageDTO> {
 		// 3. 与在线人员交集并进行路由
 		switch (MessageTypeEnum.of(message.getType())) {
 			case AUDIO_CALL, VIDEO_CALL -> {
-				Long uid = ContextUtil.getUid();
+				Long uid = dto.getUid();
 
 				// 3.1 给自己推送原始消息
 				WsBaseResp<ChatMessageResp> selfResp = WsAdapter.buildMsgSend(chatService.getMsgResp(message, null));

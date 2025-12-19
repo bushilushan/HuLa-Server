@@ -120,11 +120,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserInfoResp getUserInfo(Long uid) {
-		SummeryInfoDTO userInfo = userSummaryCache.get(uid);
+        SummeryInfoDTO userInfo = userSummaryCache.get(uid);
         Integer countByValidItemId = userBackpackDao.getCountByValidItemId(uid, ItemEnum.MODIFY_NAME_CARD.getId());
-        UserInfoResp resp = UserAdapter.buildUserInfoResp(userInfo, countByValidItemId);
-        resp.setLatestFeed(feedService.getLatestByUser(uid, uid));
-        return resp;
+		return UserAdapter.buildUserInfoResp(userInfo, countByValidItemId);
     }
 
 	@Override

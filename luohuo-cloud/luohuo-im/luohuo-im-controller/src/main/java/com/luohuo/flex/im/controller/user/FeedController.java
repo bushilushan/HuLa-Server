@@ -88,6 +88,12 @@ public class FeedController {
 		return R.success(feedService.feedDetail(feedReq.getFeedId(), ContextUtil.getUid()));
 	}
 
+	@GetMapping("latestByUser")
+	@Operation(summary = "查看指定用户最新朋友圈")
+	public R<FeedVo> latestByUser(@RequestParam("uid") Long targetUid) {
+		return R.success(feedService.getLatestByUser(targetUid, ContextUtil.getUid()));
+	}
+
 	// ==================== 评论相关接口 ====================
 
 	@PostMapping("comment/add")

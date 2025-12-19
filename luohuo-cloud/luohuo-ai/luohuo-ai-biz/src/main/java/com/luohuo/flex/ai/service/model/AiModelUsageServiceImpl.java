@@ -24,6 +24,9 @@ public class AiModelUsageServiceImpl implements AiModelUsageService {
 	@Resource
 	private AiModelUsageRecordMapper usageRecordMapper;
 
+	@Resource
+	private AiModelService modelService;
+
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void checkAndDeductUsage(Long userId, AiModelDO model) {
@@ -69,14 +72,19 @@ public class AiModelUsageServiceImpl implements AiModelUsageService {
 
 	@Override
 	public int getRemainingUsageCount(Long userId, Long modelId) {
-		// 2. 查询使用记录
-		AiModelUsageRecordDO record = usageRecordMapper.selectByUserIdAndModelId(userId, modelId);
-
-		if (record == null) {
-			// 未使用过，返回初始限制次数
-			return PUBLIC_MODEL_USAGE_LIMIT;
+		AiModelDO model = modelService.getModel(modelId);
+		if (model == null) {
+			return 0;
 		}
 
+		if (Integer.valueOf(1).equals(model.getPublicStatus()) || ObjUtil.equal(model.getUserId(), userId)) {
+			return -1;
+		}
+
+		AiModelUsageRecordDO record = usageRecordMapper.selectByUserIdAndModelId(userId, modelId);
+		if (record == null) {
+			return PUBLIC_MODEL_USAGE_LIMIT;
+		}
 		return record.getRemainingCount();
 	}
 

@@ -14,6 +14,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,8 +67,16 @@ public class OpenAiCompatSseClient {
                         .POST(HttpRequest.BodyPublishers.ofString(json))
                         .build();
 
-                client.sendAsync(request, HttpResponse.BodyHandlers.ofInputStream())
-                        .thenAccept(response -> {
+                AtomicBoolean cancelled = new AtomicBoolean(false);
+                CompletableFuture<HttpResponse<InputStream>> future =
+                        client.sendAsync(request, HttpResponse.BodyHandlers.ofInputStream());
+
+                sink.onDispose(() -> {
+                    cancelled.set(true);
+                    future.cancel(true);
+                });
+
+                future.thenAccept(response -> {
                             int status = response.statusCode();
                             if (status < 200 || status >= 300) {
                                 sink.error(new IllegalStateException("OpenAI-Compat SSE HTTP status: " + status));
@@ -75,7 +85,7 @@ public class OpenAiCompatSseClient {
                             try (InputStream is = response.body();
                                  BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
                                 String line;
-                                while ((line = reader.readLine()) != null) {
+                                while (!cancelled.get() && (line = reader.readLine()) != null) {
                                     if (!line.startsWith("data:")) continue;
                                     String payload = line.substring(5).trim();
                                     if (payload.equals("[DONE]")) {
@@ -114,11 +124,13 @@ public class OpenAiCompatSseClient {
                                         break;
                                     }
                                 }
+                                if (cancelled.get()) {
+                                    sink.complete();
+                                }
                             } catch (Exception e) {
                                 sink.error(e);
                             }
-                        })
-                        .exceptionally(e -> {
+                        }).exceptionally(e -> {
                             sink.error(e);
                             return null;
                         });
