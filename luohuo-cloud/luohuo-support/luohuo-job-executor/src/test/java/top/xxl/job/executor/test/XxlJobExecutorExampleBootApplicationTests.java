@@ -1,4 +1,4 @@
-package com.xxl.job.executor.test;
+package top.xxl.job.executor.test;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
