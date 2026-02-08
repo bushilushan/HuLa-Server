@@ -1,7 +1,9 @@
 #!groovy
 pipeline {
     agent any
-
+    tools {
+        maven 'maven'
+    }
     stages {
         stage('maven 本地编译luohuo-util模块') {
             steps {
