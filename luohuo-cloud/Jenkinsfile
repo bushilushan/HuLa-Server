@@ -33,7 +33,7 @@ pipeline {
                 script {
                     if ("${MAVEN_COMMAND}" != "none") {
                         sh "mvn clean ${MAVEN_COMMAND} -T2 -Dmaven.compile.fork=true -Dmaven.test.skip=true -P ${PROFILES}"
-                        // cd /var/jenkins_home/workspace/cloud
+                        // cd /var/jenkins_home/workspace/HuLa-Server/cloud
                         // mvn clean install -T2 -Dmaven.compile.fork=true -Dmaven.test.skip=true -P prod
                     } else {
                         echo "无需编译项目 (适用于代码没有改动的场景)"

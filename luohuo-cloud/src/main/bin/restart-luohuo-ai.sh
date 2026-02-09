@@ -8,4 +8,4 @@ if [ ! -z "$4" ]; then
     command="$4"
 fi
 
-sh /var/jenkins_home/workspace/luohuo-cloud/src/main/bin/run.sh luohuo-ai-server luohuo-ai prod "$command"
+sh /var/jenkins_home/workspace/HuLa-Server/luohuo-cloud/src/main/bin/run.sh luohuo-ai-server luohuo-ai prod "$command"

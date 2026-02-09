@@ -6,7 +6,7 @@ PROFILES=$3
 ACTION=$4
 
 # linux中项目根目录
-BASE_PATH=/var/jenkins_home/workspace/luohuo-cloud
+BASE_PATH=/var/jenkins_home/workspace/HuLa-Server/luohuo-cloud
 
 if [ "$ACTION" = "" ]; then
     echo -e "\033[0;31m 未输入操作名 \033[0m  \033[0;34m {start|stop|restart|status} \033[0m"
