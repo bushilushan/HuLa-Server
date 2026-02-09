@@ -38,3 +38,10 @@ docker/store/**
 docker/console/**
 docker/minio/**
 docker/redis/**
+
+# logs
+**/logs/
+
+# build / third-party
+/docs/install/docker/turn/coturn-4.5.1.1/
+/docs/install/docker/turn/libevent-2.1.12-stable/

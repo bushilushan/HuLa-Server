@@ -108,19 +108,6 @@ services:
        mc mb -p local/dev || true &&
        mc anonymous set download local/dev &&
        mc alias ls"
-
-  jenkins:
-    image: jenkins/jenkins:lts-jdk21
-    container_name: jenkins
-    user: root
-    restart: always
-    ports:
-      - "20000:8080"  # Web UI 端口
-      - "50000:50000"  # Agent 连接端口
-    volumes:
-      - /home/jenkins/work:/var/jenkins_home  # 数据持久化
-      - /var/run/docker.sock:/var/run/docker.sock  # 宿主机 Docker 控制
-      - /usr/bin/docker:/usr/bin/docker  # 宿主机 Docker 命令
   srs:
     image: ossrs/srs:5
     container_name: srs
