@@ -45,7 +45,7 @@ pipeline {
                         EXEC_COMMAND = "bash -x -s < ${WORKSPACE_HOME}/bin/run.sh ${JAR_NAME} ${SERVER_NAME} ${PROFILES} ${ACTION}"
 
                         echo "您选择了如下参数："
-                        echo "拉取分支：${branch}"
+                            echo "拉取分支：${branch}"
                         echo "打包命令：${MAVEN_COMMAND}"
                         echo "运行环境参数：${PROFILES}"
                         echo "启动动作：${ACTION}"

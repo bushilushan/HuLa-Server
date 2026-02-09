@@ -19,7 +19,7 @@ if [ "$MODULER" = "" ]; then
 fi
 
 if [ "$PROFILES" = "" ]; then
-    PROFILES="prod"
+    PROFILES="dev"
 fi
 
 case $MODULER in
